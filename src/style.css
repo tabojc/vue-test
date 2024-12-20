@@ -28,6 +28,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #242424;
+  color: #ffff;
 }
 
 h1 {
@@ -46,6 +48,13 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
+textarea {
+  background-color: #3b3b3b;
+  color: #a5a5a5;
+  border-color: #626262;
+}
+
 button:hover {
   border-color: #646cff;
 }
