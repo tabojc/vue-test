@@ -6,6 +6,7 @@
                 <component :is="getComponentName(field)" :field="field"
                     :modelValue="modelValue ? modelValue[field.id] : ''" 
                     @update="updateFormData"
+                    @clickedo="driver"
                     :ref="el => setFieldRef(field, el)" />
             </div>
             <div class="button-container">
@@ -21,8 +22,18 @@
 <script setup>
 import { ref, reactive, computed, defineAsyncComponent, isProxy, toRaw, watch } from 'vue';
 import fieldMixin from './FieldMixin';
+import { useMainStore } from '../stores/main.js';
+
+const mainStore = useMainStore();
+
 const emit = defineEmits(['update', 'formSubmit']);
 const fieldRefs = {};
+
+const driver = (e) => {
+    console.log({
+        event: e
+     }, "driver");
+}
 
 const props = defineProps({
     fieldDefinitions: {
@@ -64,14 +75,20 @@ const updateFormData = (idAndValue) => {
 };
 
 const onSubmit = (event) => {
-
-    emit('formSubmit', formData);
-
-    // set in text area
-    document.querySelector('#result').value = JSON.stringify(formData);
-
     event.preventDefault();
     event.stopPropagation();
+    //emit('formSubmit', formData);
+    // set in text area
+    //document.querySelector('#result').value = JSON.stringify(formData);
+    console.log(
+        Array.from(mainStore.options)
+    );
+    const results = Array.from(mainStore.options)
+        .filter(({id, label, active}) => (active))
+        .map(({id, label, active}) => ({ id, label, active }));
+    
+    document.querySelector('#result').value = JSON.stringify({name: mainStore.name, Options: results});
+
 };
 
 const getComponentName = (field) => {
@@ -129,5 +146,10 @@ input, select, textarea {
 .form-field {
     display: flex;
     align-items: center;
+}
+
+.button-container button {
+    margin-top: 24px;
+    margin-left: 86px;
 }
 </style>
